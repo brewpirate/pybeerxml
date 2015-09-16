@@ -6,40 +6,19 @@ sys.setdefaultencoding("utf-8")
 from pybeerxml import Parser
 import json
 import os
-# from cutlass.database import (
-#     Column,
-#     db,
-#     Model,
-#     ReferenceCol,
-#     relationship,
-#     SurrogatePK,
-# )
 
-# from .models import *
 path_to_beerxml_file = "SimcoeIPA.xml"
 #path_to_beerxml_file = "rojo-chango.xml"
 parser = Parser()
 
 recipes = parser.parse(path_to_beerxml_file)
 
-# beer_add = Beers(beername=form.beername.data,
-#                  user_id=current_user.id,
-#                          )
-# db.session.add(beer_add)
-# db.session.commit()
-
 test = recipes[0]
-# print test
-
-# print type (recipes)
-# print type (test)
-
-# print test.__dict__
 
 print json.dumps(test, default=lambda o: o.__dict__)
 
 
-#
+
 # for recipe in recipes:
 #
 #
