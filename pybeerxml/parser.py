@@ -7,6 +7,11 @@ from mash_step import MashStep
 from yeast import Yeast
 from style import Style
 from fermentable import Fermentable
+from misc import Misc
+from water import Water
+from equipment import Equipment
+
+
 import sys
 
 
@@ -22,9 +27,17 @@ class Parser(object):
         "Map a single node to one object's attributes"
 
         attribute = self.to_lower(node.tag)
-
         # Yield is a protected keyword in Python, so let's rename it
         attribute = "_yield" if attribute == "yield" else attribute
+        # okeys = object[__name__]
+        # print object.__setattr__
+        # print okeys
+        # print object.__setattr__
+        # if object.__dict__.has_key(attribute):
+        #     print  'Match: ' + attribute
+        # else:
+        #     print 'No: ' + attribute
+            # yield attribute
 
         try:
             valueString = node.text or ""
@@ -32,10 +45,12 @@ class Parser(object):
         except ValueError:
             value = node.text
 
-        try:
+        if object.__dict__.has_key(attribute):
             setattr(object, attribute, value)
-        except AttributeError():
+        else:
+            # print object.__dict__
             sys.stderr.write("Attribute <%s> not supported." % attribute)
+            # print "Attribute <%s> not supported." % attribute
 
     def parse(self, xml_file):
         "Get a list of parsed recipes from BeerXML input"
@@ -74,12 +89,11 @@ class Parser(object):
                         recipe.hops.append(hop)
 
                 elif tag_name == "style":
-                    style = Style()
-                    recipe.style = style
-                    self.nodes_to_object(recipeProperty, style)
+                        style = Style()
+                        recipe.style = style
+                        self.nodes_to_object(recipeProperty, style)
 
                 elif tag_name == "mash":
-
                     for mash_node in list(recipeProperty):
                         mash = Mash()
                         recipe.mash = mash
@@ -88,7 +102,7 @@ class Parser(object):
                             for mash_step_node in list(mash_node):
                                 mash_step = MashStep()
                                 self.nodes_to_object(mash_step_node, mash_step)
-                                mash.steps.append(mash_step)
+                                mash.mash_steps.append(mash_step)
                         else:
                             self.nodes_to_object(mash_node, mash)
 
